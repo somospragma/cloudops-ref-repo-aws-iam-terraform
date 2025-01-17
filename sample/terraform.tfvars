@@ -17,8 +17,9 @@ common_tags = {
   datatype      = "interno"
 }
 
-functionality = "s3-dynamo"  #aqui se pone la funcionalidad esperada por el rol
+functionality = "s3-dynamo"  
 application   = "hefesto"
+service       = "ec2"
 path          = "/service-role/"
 type          = "AWS"
 test          = "StringLike"

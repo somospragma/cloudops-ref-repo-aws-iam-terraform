@@ -2,6 +2,7 @@ variable "iam_config" {
   type = list(object({
     functionality = string
     application   = string
+    service       = string
     path          = string
     type          = string
     identifiers   = list(string)

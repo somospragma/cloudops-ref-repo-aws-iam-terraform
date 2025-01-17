@@ -39,27 +39,24 @@ variable "project" {
 variable "functionality" {
   type = string
 }
-
 variable "application" {
   type = string
 }
-
+variable "service" {
+  type = string
+}
 variable "type" {
   type = string
 }
-
 variable "test" {
   type = string
 }
-
 variable "variable" {
   type = string
 }
-
 variable "values" {
   type = list(string)
 }
-
 variable "path" {
   type = string
 }

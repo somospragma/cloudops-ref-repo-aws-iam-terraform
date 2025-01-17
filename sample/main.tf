@@ -14,6 +14,7 @@ module "IAM" {
     {
       functionality = var.functionality
       application   = var.application
+      service       = var.service
       path          = var.path
       type          = var.type
       identifiers   = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
