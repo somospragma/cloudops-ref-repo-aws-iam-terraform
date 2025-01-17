@@ -20,7 +20,6 @@ module "IAM" {
           values   = var.values
         }
       ]
-      ticket = var.ticket
       policies = [
         {
           policy_description = "Policy to allow access to S3 and DynamoDB"

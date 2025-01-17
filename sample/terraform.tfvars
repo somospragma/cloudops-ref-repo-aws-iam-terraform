@@ -29,4 +29,3 @@ type          = "AWS"
 test          = "StringLike"
 variable      = "aws:RequestTag/project"
 values        = ["hefesto"]
-ticket        = "TICKET-123"

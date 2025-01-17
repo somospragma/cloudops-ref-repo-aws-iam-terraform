@@ -10,7 +10,6 @@ variable "iam_config" {
           variable = string
           values   = list(string)
     }))
-    ticket        = string
     policies = list(object({
       policy_description = string
       policy_statements = list(object({

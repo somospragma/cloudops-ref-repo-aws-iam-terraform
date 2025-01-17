@@ -5,7 +5,6 @@ resource "aws_iam_role" "iam_role" {
       "functionality" : item.functionality
       "application" : item.application
       "path" : item.path
-      "ticket" : item.ticket
     }
   }
   name               = join("-", tolist([var.client, each.value["application"] ,var.environment, "role", each.value["functionality"], each.value["index"] + 1]))
@@ -50,7 +49,6 @@ data "aws_iam_policy_document" "dynamic_policy" {
     "policy_index" : index(iam.policies, policy)
     "functionality" : iam.functionality
     "application" : iam.application
-    "ticket" : iam.ticket
     "description" : policy.policy_description
     "policy_statements" : policy.policy_statements
     }]]) :
@@ -82,7 +80,6 @@ resource "aws_iam_policy" "policy" {
     "policy_index" : index(iam.policies, policy)
     "functionality" : iam.functionality
     "application" : iam.application
-    "ticket" : iam.ticket
     "description" : policy.policy_description
     "policy_statements" : policy.policy_statements
     }]]) :
@@ -100,7 +97,6 @@ resource "aws_iam_role_policy_attachment" "attachment" {
     "policy_index" : index(iam.policies, policy)
     "functionality" : iam.functionality
     "application" : iam.application
-    "ticket" : iam.ticket
     "description" : policy.policy_description
     "policy_statements" : policy.policy_statements
     }]]) :
