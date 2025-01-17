@@ -44,6 +44,7 @@ data "aws_iam_policy_document" "assume_role" {
 
 
 data "aws_iam_policy_document" "dynamic_policy" {
+  provider = aws.project
   for_each = { for item in flatten([for iam in var.iam_config : [for policy in iam.policies : {
     "role_index" : index(var.iam_config, iam)
     "policy_index" : index(iam.policies, policy)
@@ -75,6 +76,7 @@ data "aws_iam_policy_document" "dynamic_policy" {
 }
 
 resource "aws_iam_policy" "policy" {
+  provider = aws.project
   for_each = { for item in flatten([for iam in var.iam_config : [for policy in iam.policies : {
     "role_index" : index(var.iam_config, iam)
     "policy_index" : index(iam.policies, policy)
@@ -92,6 +94,7 @@ resource "aws_iam_policy" "policy" {
 }
 
 resource "aws_iam_role_policy_attachment" "attachment" {
+  provider = aws.project
   for_each = { for item in flatten([for iam in var.iam_config : [for policy in iam.policies : {
     "role_index" : index(var.iam_config, iam)
     "policy_index" : index(iam.policies, policy)

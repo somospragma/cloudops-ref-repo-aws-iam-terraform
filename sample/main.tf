@@ -2,7 +2,10 @@
 # Module IAM
 ################################################################
 module "IAM" {
-  source = "./module/IAM"
+  source = "../"
+  providers = {
+    aws.project = aws.alias01              #Write manually alias (the same alias name configured in providers.tf)
+  }
   client      = var.client
   environment = var.environment
   

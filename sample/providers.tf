@@ -1,4 +1,5 @@
 provider "aws" {
+  alias = "alias01"
   region  = var.aws_region
   profile = var.profile
   default_tags {

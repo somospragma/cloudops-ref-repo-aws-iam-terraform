@@ -8,9 +8,6 @@ profile           = "pra_idp_dev"
 environment       = "dev"
 client            = "pragma"
 project           = "hefesto"
-service_name_rds  = "rds"
-service_name_kms  = "kms"
-
 
 common_tags = {
   environment   = "dev"
