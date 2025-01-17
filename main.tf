@@ -1,4 +1,5 @@
 resource "aws_iam_role" "iam_role" {
+  provider = aws.project
   for_each = { for item in var.iam_config :
     "${item.functionality}-${item.application}-${index(var.iam_config, item)}" => {
       "index" : index(var.iam_config, item)
@@ -15,6 +16,7 @@ resource "aws_iam_role" "iam_role" {
 }
 
 data "aws_iam_policy_document" "assume_role" {
+  provider = aws.project  
   for_each = { for item in var.iam_config :
     "${item.functionality}-${item.application}-${index(var.iam_config, item)}" => {
       "index" : index(var.iam_config, item)
