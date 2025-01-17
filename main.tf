@@ -52,7 +52,7 @@ data "aws_iam_policy_document" "dynamic_policy" {
     "role_index" : index(var.iam_config, iam)
     "policy_index" : index(iam.policies, policy)
     "functionality" : iam.functionality
-    "service": item.service
+    "service": iam.service
     "application" : iam.application
     "description" : policy.policy_description
     "policy_statements" : policy.policy_statements
