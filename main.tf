@@ -5,13 +5,14 @@ resource "aws_iam_role" "iam_role" {
       "index" : index(var.iam_config, item)
       "functionality" : item.functionality
       "application" : item.application
+      "service": item.service
       "path" : item.path
     }
   }
-  name               = join("-", tolist([var.client, each.value["application"] ,var.environment, "role", each.value["functionality"], each.value["index"] + 1]))
+  name               = join("-", tolist([var.client, var.project, var.environment, "role", each.value["service"], each.value["application"], each.value["functionality"]]))
   path               = each.value["path"]
   assume_role_policy = data.aws_iam_policy_document.assume_role[each.key].json
-  tags = merge({ Name = "${join("-", tolist([var.client, each.value["application"], var.environment, "role", each.value["functionality"], each.value["index"] + 1]))}" },
+  tags = merge({ Name = "${join("-", tolist([var.client, var.project, var.environment, "role", each.value["service"], each.value["application"], each.value["functionality"]]))}" },
   {application_id = each.value["application"]})
 }
 
@@ -51,8 +52,8 @@ data "aws_iam_policy_document" "dynamic_policy" {
     "role_index" : index(var.iam_config, iam)
     "policy_index" : index(iam.policies, policy)
     "functionality" : iam.functionality
+    "service": item.service
     "application" : iam.application
-    "service": iam.service
     "description" : policy.policy_description
     "policy_statements" : policy.policy_statements
     }]]) :
@@ -84,17 +85,17 @@ resource "aws_iam_policy" "policy" {
     "role_index" : index(var.iam_config, iam)
     "policy_index" : index(iam.policies, policy)
     "functionality" : iam.functionality
-    "service": iam.service
     "application" : iam.application
+    "service": iam.service
     "description" : policy.policy_description
     "policy_statements" : policy.policy_statements
     }]]) :
     "${item.functionality}-${item.application}-${item.service}" => item if length(item.policy_statements) > 0
   }
-  name        = join("-", tolist([var.client, each.value["application"] ,var.environment, "policy", each.value["functionality"], each.value["policy_index"] + 1]))
+  name        = join("-", tolist([var.client, var.project, var.environment, "policy", each.value["service"], each.value["application"], each.value["functionality"]]))
   description = each.value["description"]
   policy      = data.aws_iam_policy_document.dynamic_policy[each.key].json
-  tags = merge({ Name = "${join("-", tolist([var.client, each.value["application"] ,var.environment, "policy", each.value["functionality"], each.value["policy_index"] + 1]))}" })
+  tags = merge({ Name = "${join("-", tolist([var.client, var.project, var.environment, "policy", each.value["service"], each.value["application"], each.value["functionality"]]))}" })
 }
 
 resource "aws_iam_role_policy_attachment" "attachment" {
@@ -104,7 +105,7 @@ resource "aws_iam_role_policy_attachment" "attachment" {
     "policy_index" : index(iam.policies, policy)
     "functionality" : iam.functionality
     "application" : iam.application
-    "service": iam.service
+    "service": item.service
     "description" : policy.policy_description
     "policy_statements" : policy.policy_statements
     }]]) :
