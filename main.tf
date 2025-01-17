@@ -105,7 +105,7 @@ resource "aws_iam_role_policy_attachment" "attachment" {
     "policy_index" : index(iam.policies, policy)
     "functionality" : iam.functionality
     "application" : iam.application
-    "service": item.service
+    "service": iam.service
     "description" : policy.policy_description
     "policy_statements" : policy.policy_statements
     }]]) :
