@@ -52,10 +52,11 @@ data "aws_iam_policy_document" "dynamic_policy" {
     "policy_index" : index(iam.policies, policy)
     "functionality" : iam.functionality
     "application" : iam.application
+    "service": iam.service
     "description" : policy.policy_description
     "policy_statements" : policy.policy_statements
     }]]) :
-    "${item.functionality}-${item.application}-${item.policy_index}" => item if length(item.policy_statements) > 0
+    "${item.functionality}-${item.application}-${item.service}" => item if length(item.policy_statements) > 0
   }
   dynamic "statement" {
     for_each = each.value["policy_statements"]
@@ -83,11 +84,12 @@ resource "aws_iam_policy" "policy" {
     "role_index" : index(var.iam_config, iam)
     "policy_index" : index(iam.policies, policy)
     "functionality" : iam.functionality
+    "service": iam.service
     "application" : iam.application
     "description" : policy.policy_description
     "policy_statements" : policy.policy_statements
     }]]) :
-    "${item.functionality}-${item.application}-${item.policy_index}" => item if length(item.policy_statements) > 0
+    "${item.functionality}-${item.application}-${item.service}" => item if length(item.policy_statements) > 0
   }
   name        = join("-", tolist([var.client, each.value["application"] ,var.environment, "policy", each.value["functionality"], each.value["policy_index"] + 1]))
   description = each.value["description"]
@@ -102,10 +104,11 @@ resource "aws_iam_role_policy_attachment" "attachment" {
     "policy_index" : index(iam.policies, policy)
     "functionality" : iam.functionality
     "application" : iam.application
+    "service": iam.service
     "description" : policy.policy_description
     "policy_statements" : policy.policy_statements
     }]]) :
-    "${item.functionality}-${item.application}-${item.policy_index}" => item if length(item.policy_statements) > 0
+    "${item.functionality}-${item.application}-${item.service}" => item if length(item.policy_statements) > 0
   }
   role       = aws_iam_role.iam_role["${each.value.functionality}-${each.value.application}-${each.value.role_index}"].name
   policy_arn = aws_iam_policy.policy[each.key].arn
