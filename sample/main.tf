@@ -4,11 +4,12 @@
 module "IAM" {
   source = "../"
   providers = {
-    aws.project = aws.alias01              #Write manually alias (the same alias name configured in providers.tf)
+    aws.project = aws.alias01 #Write manually alias (the same alias name configured in providers.tf)
   }
   client      = var.client
   environment = var.environment
-  
+  project     = var.project
+
   iam_config = [
     {
       functionality = var.functionality
@@ -49,4 +50,4 @@ module "IAM" {
 }
 
 
-  
+

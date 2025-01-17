@@ -92,7 +92,7 @@ resource "aws_iam_policy" "policy" {
   name        = join("-", tolist([var.client, each.value["application"] ,var.environment, "policy", each.value["functionality"], each.value["policy_index"] + 1]))
   description = each.value["description"]
   policy      = data.aws_iam_policy_document.dynamic_policy[each.key].json
-  tags = merge({ Name = "${join("-", tolist([var.client, each.value["application"] ,var.environment, "policy", each.value["functionality"], each.value["policy_index"] + 1]))}" })
+  tags = merge({ Name = "${join("-", tolist([var.client, var.project, var.environment, each.value["application"], "policy", each.value["functionality"], each.value["policy_index"] + 1]))}" })
 }
 
 resource "aws_iam_role_policy_attachment" "attachment" {
