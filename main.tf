@@ -9,10 +9,10 @@ resource "aws_iam_role" "iam_role" {
       "path" : item.path
     }
   }
-  name               = join("-", tolist([var.client, var.project, var.environment, "role", each.value["service"], each.value["functionality"], each.value["application"], each.value["index"] + 1]))
+  name               = join("-", tolist([var.client, var.project, var.environment, "role", each.value["service"], each.value["application"], each.value["functionality"], each.value["index"] + 1]))
   path               = each.value["path"]
   assume_role_policy = data.aws_iam_policy_document.assume_role[each.key].json
-  tags = merge({ Name = "${join("-", tolist([var.client, var.project, var.environment, "role", each.value["service"], each.value["functionality"], each.value["application"], each.value["index"] + 1]))}" },
+  tags = merge({ Name = "${join("-", tolist([var.client, var.project, var.environment, "role", each.value["service"], each.value["application"], each.value["functionality"], each.value["index"] + 1]))}" },
   {application_id = each.value["application"]})
 }
 
@@ -91,10 +91,10 @@ resource "aws_iam_policy" "policy" {
     }]]) :
     "${item.functionality}-${item.application}-${item.policy_index}" => item if length(item.policy_statements) > 0
   }
-  name        = join("-", tolist([var.client, var.project, var.environment, "policy", each.value["service"],  each.value["functionality"], each.value["application"],  each.value["policy_index"] + 1]))
+  name        = join("-", tolist([var.client, var.project, var.environment, "policy", each.value["service"], each.value["application"], each.value["functionality"], each.value["policy_index"] + 1]))
   description = each.value["description"]
   policy      = data.aws_iam_policy_document.dynamic_policy[each.key].json
-  tags = merge({ Name = "${join("-", tolist([var.client, var.project, var.environment, "policy", each.value["service"],  each.value["functionality"], each.value["application"],  each.value["policy_index"] + 1]))}" })
+  tags = merge({ Name = "${join("-", tolist([var.client, var.project, var.environment, "policy", each.value["service"], each.value["application"], each.value["functionality"], each.value["policy_index"] + 1]))}" })
 }
 
 resource "aws_iam_role_policy_attachment" "attachment" {
