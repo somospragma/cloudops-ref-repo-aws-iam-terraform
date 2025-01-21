@@ -1,7 +1,7 @@
 resource "aws_iam_role" "iam_role" {
   provider = aws.project
   for_each = { for item in var.iam_config :
-    "${item.functionality}-${item.application}-${index(var.iam_config, item)}" => {
+    "${item.functionality}-${item.application}-${item.service}" => {
       "index" : index(var.iam_config, item)
       "functionality" : item.functionality
       "application" : item.application
@@ -19,7 +19,7 @@ resource "aws_iam_role" "iam_role" {
 data "aws_iam_policy_document" "assume_role" {
   provider = aws.project  
   for_each = { for item in var.iam_config :
-    "${item.functionality}-${item.application}-${index(var.iam_config, item)}" => {
+    "${item.functionality}-${item.application}-${item.service}" => {
       "index" : index(var.iam_config, item)
       "type" : item.type
       "identifiers" : item.identifiers
@@ -111,6 +111,6 @@ resource "aws_iam_role_policy_attachment" "attachment" {
     }]]) :
     "${item.functionality}-${item.application}-${item.service}" => item if length(item.policy_statements) > 0
   }
-  role       = aws_iam_role.iam_role["${each.value.functionality}-${each.value.application}-${each.value.role_index}"].name
+  role       = aws_iam_role.iam_role["${each.value.functionality}-${each.value.application}-${each.value.service}"].name
   policy_arn = aws_iam_policy.policy[each.key].arn
 }
