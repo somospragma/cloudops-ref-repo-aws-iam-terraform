@@ -1,0 +1,61 @@
+###########################################
+########## Common variables ###############
+###########################################
+
+profile     = "profile01"
+aws_region  = "us-east-1"
+environment = "dev"
+client      = "cliente01"
+project     = "proyecto01"
+common_tags = {
+  environment   = "dev"
+  project-name  = "proyecto01"
+  cost-center   = "xxx"
+  owner         = "xxx"
+  area          = "xxx"
+  provisioned   = "xxx"
+  datatype      = "xxx"
+}
+
+###########################################
+############ IAM variables ################
+###########################################
+
+iam_config = [
+    {
+      functionality = "s3"
+      application   = "app01"
+      service       = "ecs"
+      path          = "/service-role/"
+      type          = "AWS"
+      identifiers   = ["xxxxxxx"]
+      principal_conditions = [
+        {
+          test     = "StringLike"
+          variable = "aws:RequestTag/project"
+          values   = ["app01"]
+        }
+      ]
+      policies = [
+        {
+          policy_description = "Policy to allow access to S3 and DynamoDB"
+          policy_statements = [
+            {
+              sid       = "AllowS3Access"
+              actions   = ["s3:ListBucket", "s3:GetObject"]
+              resources = ["*"]
+              effect    = "Allow"
+              condition = []
+            },
+            {
+              sid       = "AllowDynamoDBAccess"
+              actions   = ["dynamodb:GetItem", "dynamodb:Query", "dynamodb:PutItem"]
+              resources = ["*"]
+              effect    = "Allow"
+              condition = []
+            }
+          ]
+        }
+      ]
+    }
+  ]

@@ -1,3 +1,7 @@
+###########################################
+########### IAM Resources #################
+###########################################
+
 resource "aws_iam_role" "iam_role" {
   provider = aws.project
   for_each = { for item in var.iam_config :
