@@ -49,7 +49,6 @@ data "aws_iam_policy_document" "assume_role" {
   }
 }
 
-
 data "aws_iam_policy_document" "dynamic_policy" {
   provider = aws.project
   for_each = { for item in flatten([for iam in var.iam_config : [for policy in iam.policies : {
