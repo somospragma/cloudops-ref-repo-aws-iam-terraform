@@ -48,6 +48,7 @@ variable "iam_config" {
         }))
       }))
     }))
+    managed_policy_arns = optional(list(string), [])
   }))
   description = <<EOF
     - application: (string) Application name.
@@ -71,5 +72,6 @@ variable "iam_config" {
           - test: (string) Name of the IAM condition operator to evaluate.
           - variable: (string) Name of a Context Variable to apply the condition to. Context variables may either be standard AWS variables starting with aws: or service-specific variables prefixed with the service name.
           - values: (list(string)) Values to evaluate the condition against. If multiple values are provided, the condition matches if at least one of them applies. That is, AWS evaluates multiple values as though using an "OR" boolean operation.
+    - managed_policy_arns: (optional(list(string))) List of AWS managed policy ARNs to attach to the IAM role. For example: ["arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"]. Defaults to an empty list if not specified.
   EOF
 }

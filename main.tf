@@ -117,3 +117,19 @@ resource "aws_iam_role_policy_attachment" "attachment" {
   role       = aws_iam_role.iam_role["${each.value.functionality}-${each.value.application}-${each.value.service}"].name
   policy_arn = aws_iam_policy.policy[each.key].arn
 }
+
+# Atachar Politicas Administradas AWS
+resource "aws_iam_role_policy_attachment" "managed_policy_attachment" {
+  provider = aws.project
+  for_each = { for item in flatten([
+    for iam in var.iam_config : [
+      for arn in iam.managed_policy_arns : {
+        role_name = "${iam.functionality}-${iam.application}-${iam.service}"
+        policy_arn = arn
+      }
+    ]
+  ]) : "${item.role_name}-${item.policy_arn}" => item }
+
+  role       = aws_iam_role.iam_role[each.value.role_name].name
+  policy_arn = each.value.policy_arn
+}
