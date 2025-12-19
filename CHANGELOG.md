@@ -5,6 +5,16 @@ Todos los cambios notables en este proyecto serán documentados en este archivo.
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.3] - 2025-12-19
+
+### Eliminado
+- Instance Profile automático para roles de EC2 (conflicto con EKS Auto Mode)
+- EKS Auto Mode gestiona automáticamente los instance profiles, no deben crearse manualmente
+
+### Nota
+- Para EKS Auto Mode, solo crear el rol IAM con las políticas requeridas
+- AWS creará y gestionará el instance profile automáticamente
+
 ## [1.0.2] - 2025-12-19
 
 ### Añadido
