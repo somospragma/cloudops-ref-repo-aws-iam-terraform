@@ -120,3 +120,24 @@ resource "aws_iam_role_policy_attachment" "managed_policy_attachment" {
   role       = aws_iam_role.iam_role[each.value.role_key].name
   policy_arn = each.value.policy_arn
 }
+
+# Instance Profile para roles de EC2 (requerido para EKS Auto Mode)
+resource "aws_iam_instance_profile" "instance_profile" {
+  provider = aws.project
+  for_each = {
+    for role_key, role in var.iam_config : 
+    role_key => role
+    if role.service == "ec2"
+  }
+  
+  name = aws_iam_role.iam_role[each.key].name
+  role = aws_iam_role.iam_role[each.key].name
+  path = each.value.path
+  
+  tags = merge(
+    { 
+      Name = join("-", [var.client, var.project, var.environment, "instance-profile", each.value.service, each.value.application, each.value.functionality])
+    },
+    each.value.additional_tags
+  )
+}

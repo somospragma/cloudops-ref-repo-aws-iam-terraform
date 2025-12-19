@@ -5,6 +5,15 @@ Todos los cambios notables en este proyecto serán documentados en este archivo.
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.2] - 2025-12-19
+
+### Añadido
+- Instance Profile automático para roles de EC2 (requerido para EKS Auto Mode)
+- Outputs `instance_profile_arn` e `instance_profile_name` en `iam_roles_info`
+
+### Corregido
+- Problema de nodos no creándose en EKS Auto Mode por falta de instance profile
+
 ## [1.0.1] - 2025-12-19
 
 ### Añadido
