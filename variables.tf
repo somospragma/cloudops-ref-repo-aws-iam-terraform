@@ -29,6 +29,7 @@ variable "iam_config" {
     path          = string
     type          = string
     identifiers   = list(string)
+    assume_role_actions = optional(list(string), ["sts:AssumeRole"])
     principal_conditions = list(object({
           test     = string
           variable = string
@@ -60,6 +61,7 @@ variable "iam_config" {
     - path: (string) Path to the role.
     - type: (string) Type of principal. Valid values include AWS, Service, Federated, CanonicalUser and *.
     - identifiers: (list(string)) List of identifiers for principals. When type is AWS, these are IAM principal ARNs, e.g., arn:aws:iam::12345678901:role/yak-role. When type is Service, these are AWS Service roles, e.g., lambda.amazonaws.com. When type is Federated, these are web identity users or SAML provider ARNs, e.g., accounts.google.com or arn:aws:iam::12345678901:saml-provider/yak-saml-provider.
+    - assume_role_actions: (optional(list(string))) List of actions for the assume role policy. Defaults to ["sts:AssumeRole"]. For EKS Auto Mode, use ["sts:AssumeRole", "sts:TagSession"].
     - principal_conditions: (list(object))
         - test: (string) Name of the IAM condition operator to evaluate.
         - values: (list(string)) Values to evaluate the condition against. If multiple values are provided, the condition matches if at least one of them applies. That is, AWS evaluates multiple values as though using an "OR" boolean operation.

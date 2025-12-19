@@ -5,6 +5,20 @@ Todos los cambios notables en este proyecto serán documentados en este archivo.
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.4] - 2025-12-19
+
+### Añadido
+- Campo `assume_role_actions` en `iam_config` para personalizar acciones del assume role policy
+- Soporte para `sts:TagSession` requerido por EKS Auto Mode en cluster roles
+- Valor por defecto `["sts:AssumeRole"]` para compatibilidad con roles existentes
+
+### Cambiado
+- `data.aws_iam_policy_document.assume_role` ahora usa `each.value.assume_role_actions` en lugar de valor hardcoded
+
+### Nota
+- Para EKS Auto Mode cluster roles, usar: `assume_role_actions = ["sts:AssumeRole", "sts:TagSession"]`
+- Para roles de nodos y otros roles, el valor por defecto `["sts:AssumeRole"]` es suficiente
+
 ## [1.0.3] - 2025-12-19
 
 ### Eliminado

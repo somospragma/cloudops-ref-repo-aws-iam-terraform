@@ -24,7 +24,7 @@ data "aws_iam_policy_document" "assume_role" {
   for_each = var.iam_config
 
   statement {
-    actions = ["sts:AssumeRole"]
+    actions = each.value.assume_role_actions
     principals {
       type        = each.value.type
       identifiers = each.value.identifiers
