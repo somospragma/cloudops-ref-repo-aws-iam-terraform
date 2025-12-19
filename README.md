@@ -92,21 +92,15 @@ module "iam" {
   }
 
   # IAM configuration
-  iam_config = [
-    {
+  iam_config = {
+    "ecs-app01-s3" = {
       functionality = "s3"
       application   = "app01"
       service       = "ecs"
       path          = "/service-role/"
-      type          = "AWS"
-      identifiers   = ["xxxxxxx"]
-      principal_conditions = [
-        {
-          test     = "StringLike"
-          variable = "aws:RequestTag/project"
-          values   = ["app01"]
-        }
-      ]
+      type          = "Service"
+      identifiers   = ["ecs-tasks.amazonaws.com"]
+      principal_conditions = []
       policies = [
         {
           policy_description = "Policy to allow access to S3 and DynamoDB"
@@ -128,8 +122,10 @@ module "iam" {
           ]
         }
       ]
+      managed_policy_arns = []
+      additional_tags     = {}
     }
-  ]
+  }
 }
 ```
 

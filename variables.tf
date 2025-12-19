@@ -22,7 +22,7 @@ variable "project" {
 ###########################################
 
 variable "iam_config" {
-  type = list(object({
+  type = map(object({
     functionality = string
     application   = string
     service       = string
@@ -49,29 +49,49 @@ variable "iam_config" {
       }))
     }))
     managed_policy_arns = optional(list(string), [])
+    additional_tags     = optional(map(string), {})
   }))
   description = <<EOF
-    - application: (string) Application name.
+    Map of IAM roles to create. The key is a unique identifier for the role.
+    
     - functionality: (string) Functionality name.
+    - application: (string) Application name.
     - service: (string) Service name. 
     - path: (string) Path to the role.
     - type: (string) Type of principal. Valid values include AWS, Service, Federated, CanonicalUser and *.
     - identifiers: (list(string)) List of identifiers for principals. When type is AWS, these are IAM principal ARNs, e.g., arn:aws:iam::12345678901:role/yak-role. When type is Service, these are AWS Service roles, e.g., lambda.amazonaws.com. When type is Federated, these are web identity users or SAML provider ARNs, e.g., accounts.google.com or arn:aws:iam::12345678901:saml-provider/yak-saml-provider.
     - principal_conditions: (list(object))
         - test: (string) Name of the IAM condition operator to evaluate.
-        - values: (string) Values to evaluate the condition against. If multiple values are provided, the condition matches if at least one of them applies. That is, AWS evaluates multiple values as though using an "OR" boolean operation.
+        - values: (list(string)) Values to evaluate the condition against. If multiple values are provided, the condition matches if at least one of them applies. That is, AWS evaluates multiple values as though using an "OR" boolean operation.
         - variable: (string) Name of a Context Variable to apply the condition to. Context variables may either be standard AWS variables starting with aws: or service-specific variables prefixed with the service name.
-    - policies (list(object))
+    - policies: (list(object))
       - policy_description: (string) Policy description.
       - policy_statements: (list(object))
         - sid: (string) Sid (statement ID) is an identifier for a policy statement.
         - actions: (list(string)) List of actions that this statement either allows or denies
         - resources: (list(string)) List of resource ARNs that this statement applies to. This is required by AWS if used for an IAM policy. Conflicts with not_resources.
         - effect: (string) Whether this statement allows or denies the given actions. Valid values are Allow and Deny. Defaults to Allow.
-        - condition:
+        - condition: (list(object))
           - test: (string) Name of the IAM condition operator to evaluate.
           - variable: (string) Name of a Context Variable to apply the condition to. Context variables may either be standard AWS variables starting with aws: or service-specific variables prefixed with the service name.
           - values: (list(string)) Values to evaluate the condition against. If multiple values are provided, the condition matches if at least one of them applies. That is, AWS evaluates multiple values as though using an "OR" boolean operation.
     - managed_policy_arns: (optional(list(string))) List of AWS managed policy ARNs to attach to the IAM role. For example: ["arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"]. Defaults to an empty list if not specified.
+    - additional_tags: (optional(map(string))) Additional tags specific to this IAM role. Defaults to an empty map if not specified.
   EOF
+  
+  validation {
+    condition = alltrue([
+      for key, config in var.iam_config : 
+      length(config.functionality) > 0 && length(config.application) > 0 && length(config.service) > 0
+    ])
+    error_message = "Los campos functionality, application y service son obligatorios y no pueden estar vacíos."
+  }
+  
+  validation {
+    condition = alltrue([
+      for key, config in var.iam_config : 
+      contains(["AWS", "Service", "Federated", "CanonicalUser", "*"], config.type)
+    ])
+    error_message = "El tipo de principal debe ser uno de: AWS, Service, Federated, CanonicalUser, *."
+  }
 }
